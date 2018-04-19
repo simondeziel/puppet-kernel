@@ -93,14 +93,14 @@ node 'router.example.com' {
   # ...
 
   # load some modules on boot
-  create_resources(modules_load::conf,lookup('modules_load::conf'))
+  include modules_load
 }
 
 node 'foobar.example.com' {
   # ...
 
   # load some modules on boot
-  create_resources(modules_load::conf,lookup('modules_load::conf'))
+  include modules_load
 }
 ```
 
