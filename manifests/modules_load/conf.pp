@@ -1,7 +1,7 @@
 #
-# Define: modules_load::conf
+# Define: kernel::modules_load::conf
 #
-define modules_load::conf (
+define kernel::modules_load::conf (
   Array[String] $modules,
   Enum['present','absent'] $ensure = 'present',
 ) {

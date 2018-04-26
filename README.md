@@ -1,18 +1,33 @@
-# Puppet modules-load
+# Puppet kernel
 
-Manages /etc/modules and /etc/modules-load.d/*.conf files.
+Manages kernel packages and other kernel related config files.
 
 ## Requirements
-* Modern distro with /etc/modules-load.d directory unless you only
-  want to manage /etc/modules.
+* Ubuntu 14.04 and later
 
 ## Usage
+
+To keep the kernel packages up to date:
+
+```puppet
+  class { 'kernel':
+    package_ensure => 'latest',
+  }
+```
+
+To blacklist the `dccp` module:
+
+```puppet
+  kernel::modprobe::blacklist { 'dccp':
+    comment => 'CVE-2017-6353',
+  }
+```
 
 To make net.netfilter.nf_conntrack_tcp_loose=0 work, 2 modules are needed which can be
 loaded on boot with:
 
 ```puppet
-  modules_load::conf { 'nf-conntrack':
+  kernel::modules_load::conf { 'nf-conntrack':
     modules => [
                  '# needed to have net.netfilter.nf_conntrack_tcp_loose',
                  'nf_conntrack_ipv4',
@@ -35,7 +50,7 @@ To ensure /etc/modules only contains the default comment:
 
 ```puppet
   # the "modules" name is handled in a special way
-  modules_load::conf { 'modules':
+  kernel::modules_load::conf { 'modules':
     modules => [
                  '# /etc/modules: kernel modules to load at boot time.',
                  '#',
@@ -64,7 +79,7 @@ It is also useful to combine hiera data:
 ```
 # data/common.yaml
 lookup_options:
-  modules_load::conf:
+  kernel::modules_load::conf:
     merge:
       strategy: deep
       knockout_prefix: '--'
@@ -79,7 +94,7 @@ modules_load::conf:
       - ''
 
 # data/nodes/router.example.com.yaml
-modules_load::conf:
+kernel::modules_load::conf:
   he:
     modules:
       - '# for HE tunnel'
@@ -93,14 +108,14 @@ node 'router.example.com' {
   # ...
 
   # load some modules on boot
-  include modules_load
+  include kernel::modules_load
 }
 
 node 'foobar.example.com' {
   # ...
 
   # load some modules on boot
-  include modules_load
+  include kernel::modules_load
 }
 ```
 

@@ -1,8 +1,11 @@
 #
-# Class: modules_load
+# Class: kernel
 #
-class modules_load (
-  String $lookup_key = 'modules_load::conf',
-) {
-  create_resources(modules_load::conf,lookup($lookup_key))
+class kernel (
+  Array[String] $package_names                 = $kernel::params::package_names,
+  Enum['installed','latest'] $packages_ensure  = $kernel::params::package_ensure,
+) inherits kernel::params {
+  package { $package_names:
+    ensure => $package_ensure,
+  }
 }
