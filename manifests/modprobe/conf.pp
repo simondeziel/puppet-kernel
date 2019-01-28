@@ -18,5 +18,6 @@ define kernel::modprobe::conf (
     ensure  => $ensure,
     content => $content,
     source  => $source,
+    notify  => Exec['update-initramfs'],
   }
 }

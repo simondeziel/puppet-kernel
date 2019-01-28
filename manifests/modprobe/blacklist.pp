@@ -13,10 +13,9 @@ define kernel::modprobe::blacklist (
   Enum['present','absent'] $ensure = 'present',
   Optional[String] $comment        = undef,
 ) {
-  if $comment {
-    $content = "# File managed by Puppet\n# ${comment}\ninstall ${name} /bin/true\n"
-  } else {
-    $content = "# File managed by Puppet\ninstall ${name} /bin/true\n"
+  $content = $comment ? {
+    undef   => "# File managed by Puppet\ninstall ${name} /bin/true\n",
+    default => "# File managed by Puppet\n# ${comment}\ninstall ${name} /bin/true\n"
   }
 
   kernel::modprobe::conf { "blacklist-${name}":
