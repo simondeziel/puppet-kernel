@@ -8,9 +8,4 @@ class kernel (
   package { $package_names:
     ensure => $package_ensure,
   }
-
-  exec { 'update-initramfs':
-    command     => '/usr/sbin/update-initramfs -uk all',
-    refreshonly => true,
-  }
 }

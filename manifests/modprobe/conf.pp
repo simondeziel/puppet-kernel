@@ -14,6 +14,8 @@ define kernel::modprobe::conf (
   Optional[String] $content        = undef,
   Optional[String] $source         = undef,
 ) {
+  include kernel::update_initramfs
+
   file { "/etc/modprobe.d/${name}.conf":
     ensure  => $ensure,
     content => $content,
